@@ -1,0 +1,76 @@
+version: '1.0'
+name: wallery-build
+displayName: Wallery 全平台构建
+triggers:
+  push:
+    tags:
+      prefix:
+        - v
+  schedule:
+    - cron: '0 10 * * 0'
+
+stages:
+  - stage: build-windows
+    displayName: 构建 Windows 版
+    strategy: fast
+    trigger: auto
+    steps:
+      - step: build@nodejs
+        name: build_win
+        displayName: Windows Tauri 构建
+        nodeVersion: 22
+        commands:
+          - npm install
+        artifacts:
+          - name: WIN_ARTIFACT
+            path:
+              - ./src-tauri/target/release/wallery.exe
+              - ./src-tauri/target/release/bundle/msi/*.msi
+
+  - stage: build-macos
+    displayName: 构建 macOS 版
+    strategy: fast
+    trigger: auto
+    steps:
+      - step: build@nodejs
+        name: build_mac
+        displayName: macOS Tauri 构建
+        nodeVersion: 22
+        commands:
+          - npm install
+        artifacts:
+          - name: MAC_ARTIFACT
+            path:
+              - ./src-tauri/target/release/bundle/dmg/*.dmg
+              - ./src-tauri/target/release/bundle/macos/*.app
+
+  - stage: build-linux
+    displayName: 构建 Linux 版
+    strategy: fast
+    trigger: auto
+    steps:
+      - step: build@nodejs
+        name: build_linux
+        displayName: Linux Tauri 构建
+        nodeVersion: 22
+        commands:
+          - sudo apt-get update
+          - sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
+          - npm install
+        artifacts:
+          - name: LINUX_ARTIFACT
+            path:
+              - ./src-tauri/target/release/bundle/deb/*.deb
+              - ./src-tauri/target/release/bundle/appimage/*.AppImage
+
+  - stage: publish
+    displayName: 发布到发行版
+    strategy: fast
+    trigger: auto
+    steps:
+      - step: publish@general_artifacts
+        name: upload_all
+        displayName: 上传构建产物
+        dependArtifact: WIN_ARTIFACT
+        artifactRepository: default
+        artifactName: wallery-release
