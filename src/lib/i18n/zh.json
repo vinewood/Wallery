@@ -1,0 +1,94 @@
+{
+  "app": {
+    "name": "Wallery",
+    "subtitle": "幕间 · 幕后的每一帧",
+    "version": "Version 1.0.0"
+  },
+  "tabs": {
+    "sources": "来源",
+    "categories": "品类",
+    "schedule": "定时",
+    "about": "关于"
+  },
+  "sources": {
+    "title": "壁纸来源",
+    "bing": "Bing 每日图",
+    "bing_desc": "微软 Bing 每日美图，自动匹配所在地区",
+    "wallhaven": "Wallhaven",
+    "wallhaven_desc": "高质量社区壁纸，无需 API Key",
+    "nasa": "NASA 每日天文图",
+    "nasa_desc": "天文图片每日一图，探索宇宙之美",
+    "pexels": "Pexels",
+    "pexels_desc": "免费高清摄影图库，需 API Key",
+    "unsplash": "Unsplash",
+    "unsplash_desc": "摄影师社区精选，需 API Key",
+    "default_badge": "默认",
+    "api_key_label": "API 密钥",
+    "pexels_placeholder": "Pexels API Key（可选）",
+    "unsplash_placeholder": "Unsplash API Key（可选）",
+    "nasa_placeholder": "NASA API Key（可选，DEMO_KEY 可用）"
+  },
+  "categories": {
+    "title": "我的品类",
+    "placeholder": "输入关键词添加品类，如：赛博朋克、极简...",
+    "add_btn": "+ 添加",
+    "wallhaven_hot": "Wallhaven 热门品类",
+    "pexels_hot": "Pexels 热门品类",
+    "unsplash_hot": "Unsplash 热门品类"
+  },
+  "schedule": {
+    "title": "定时设置",
+    "desktop_label": "桌面壁纸",
+    "desktop_desc": "自动更换桌面背景",
+    "lock_label": "登录界面壁纸",
+    "lock_desc": "同时更换登录界面壁纸（仅 Windows）",
+    "autostart_label": "开机自启",
+    "autostart_desc": "开机自动启动，最小化到系统托盘",
+    "frequency_label": "更新频率",
+    "frequency_daily": "每天",
+    "frequency_12h": "每 12 小时",
+    "frequency_6h": "每 6 小时",
+    "frequency_1h": "每小时",
+    "mac_hint": "macOS 用户提示：macOS 不支持修改登录界面壁纸。如需开机自启，请到「系统设置 → 通用 → 登录项」中手动添加 Wallery。"
+  },
+  "about": {
+    "free_badge": "完全免费",
+    "opensource_badge": "开源",
+    "size_badge": "安装包大小",
+    "memory_badge": "内存占用",
+    "story_title": "起心动念",
+    "story_p1": "市面上没有真正免费好用的壁纸软件。",
+    "story_p2": "我试过很多——要么每月订阅费不菲，要么界面丑陋难用，要么早已停止更新。那些标榜'免费'的，点进去才发现隐藏着各种付费墙。",
+    "story_p3": "所以我决定自己做一个。完全免费、完全开源、永远如此。",
+    "story_p4": "Wallery 幕间——幕布背后的那一帧帧美好，应该属于每一个人。",
+    "sponsor_title": "☕ 赞助支持",
+    "sponsor_sub": "如果 Wallery 让你的桌面变得更好看了一点点\n考虑请我喝杯咖啡？每一点支持都是继续开发的动力",
+    "qr_placeholder": "📷 支付宝收款码\n（待贴入）",
+    "github": "GitHub",
+    "gitee": "Gitee"
+  },
+  "tray": {
+    "next": "切换下一张",
+    "skip": "跳过今天",
+    "copy_url": "复制图片链接",
+    "save": "保存当前壁纸",
+    "open_src": "打开来源页面",
+    "settings": "设置…",
+    "quit": "退出 Wallery",
+    "license": "v1.0.0 · MIT 开源"
+  },
+  "browse": {
+    "select_source": "请选择一个壁纸来源",
+    "set_wallpaper": "设为壁纸",
+    "download": "下载",
+    "prev": "上一页",
+    "next": "下一页",
+    "page": "第",
+    "of": "页，共",
+    "no_results": "暂无壁纸",
+    "categories": "分类",
+    "all": "全部",
+    "schedule_title": "自动更新",
+    "about_short": "关于"
+  }
+}

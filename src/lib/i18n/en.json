@@ -1,0 +1,94 @@
+{
+  "app": {
+    "name": "Wallery",
+    "subtitle": "幕间 · 幕后的每一帧",
+    "version": "Version 1.0.0"
+  },
+  "tabs": {
+    "sources": "Sources",
+    "categories": "Categories",
+    "schedule": "Schedule",
+    "about": "About"
+  },
+  "sources": {
+    "title": "Wallpaper Sources",
+    "bing": "Bing Daily",
+    "bing_desc": "Microsoft Bing daily image, auto-matched to your region",
+    "wallhaven": "Wallhaven",
+    "wallhaven_desc": "High quality community wallpapers, no API key needed",
+    "nasa": "NASA APOD",
+    "nasa_desc": "Astronomy Picture of the Day — explore the universe",
+    "pexels": "Pexels",
+    "pexels_desc": "Free high-resolution photography, needs API key",
+    "unsplash": "Unsplash",
+    "unsplash_desc": "Photographer community selections, needs API key",
+    "default_badge": "DEFAULT",
+    "api_key_label": "API Keys",
+    "pexels_placeholder": "Pexels API Key (optional)",
+    "unsplash_placeholder": "Unsplash API Key (optional)",
+    "nasa_placeholder": "NASA API Key (optional, DEMO_KEY works)"
+  },
+  "categories": {
+    "title": "Your Categories",
+    "placeholder": "Add a category keyword...",
+    "add_btn": "+ Add",
+    "wallhaven_hot": "Wallhaven Popular",
+    "pexels_hot": "Pexels Popular",
+    "unsplash_hot": "Unsplash Popular"
+  },
+  "schedule": {
+    "title": "Schedule",
+    "desktop_label": "Desktop Wallpaper",
+    "desktop_desc": "Auto-update desktop background",
+    "lock_label": "Lock Screen Wallpaper",
+    "lock_desc": "Also update lock screen (Windows only)",
+    "autostart_label": "Auto-start on boot",
+    "autostart_desc": "Launch on startup, minimized to tray",
+    "frequency_label": "Update frequency",
+    "frequency_daily": "Every day",
+    "frequency_12h": "Every 12 hours",
+    "frequency_6h": "Every 6 hours",
+    "frequency_1h": "Every hour",
+    "mac_hint": "macOS users: lock screen is not supported. Add to Login Items in System Settings → General → Login Items for auto-start."
+  },
+  "about": {
+    "free_badge": "Free Forever",
+    "opensource_badge": "Open Source",
+    "size_badge": "Package Size",
+    "memory_badge": "Memory Usage",
+    "story_title": "Why Wallery?",
+    "story_p1": "There really isn't a good free wallpaper app out there.",
+    "story_p2": "I tried many — subscription fees, ugly interfaces, abandoned projects. The ones labeled 'free' hid paywalls everywhere.",
+    "story_p3": "So I built my own. Completely free, completely open source, forever.",
+    "story_p4": "Wallery — every beautiful frame behind the curtain should belong to everyone.",
+    "sponsor_title": "☕ Support This Project",
+    "sponsor_sub": "If Wallery made your desktop a little more beautiful,\nconsider buying me a coffee? Every bit of support fuels development.",
+    "qr_placeholder": "📷 Alipay QR Code\n(to be added)",
+    "github": "GitHub",
+    "gitee": "Gitee"
+  },
+  "tray": {
+    "next": "Next Wallpaper",
+    "skip": "Skip Today",
+    "copy_url": "Copy Image URL",
+    "save": "Save Current",
+    "open_src": "Open Source Page",
+    "settings": "Settings…",
+    "quit": "Quit Wallery",
+    "license": "v1.0.0 · MIT License"
+  },
+  "browse": {
+    "select_source": "Select a source to browse",
+    "set_wallpaper": "Set as wallpaper",
+    "download": "Download",
+    "prev": "Previous",
+    "next": "Next",
+    "page": "Page",
+    "of": "of",
+    "no_results": "No wallpapers found",
+    "categories": "Categories",
+    "all": "All",
+    "schedule_title": "Auto Update",
+    "about_short": "About"
+  }
+}
