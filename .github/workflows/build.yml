@@ -30,7 +30,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: install Linux dependencies
-        if: matrix.platform == 'ubuntu-22.04'
+        if: runner.os == 'Linux'
         run: |
           sudo apt-get update
           sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
@@ -38,10 +38,10 @@ jobs:
       - name: setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: lts/*
+          node-version: 22
           cache: 'npm'
 
-      - name: install Rust
+      - name: install Rust stable
         uses: dtolnay/rust-toolchain@stable
         with:
           targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
@@ -51,16 +51,27 @@ jobs:
         with:
           workspaces: './src-tauri -> target'
 
-      - name: install frontend deps
+      - name: install frontend dependencies
         run: npm install
 
+      - name: build frontend
+        run: npm run build
+
       - name: build Tauri app
-        uses: tauri-apps/tauri-action@v0
+        run: |
+          cd src-tauri
+          cargo build --release ${{ matrix.args }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CARGO_PROFILE_RELEASE_STRIP: true
+          CARGO_PROFILE_RELEASE_OPT_LEVEL: z
+          CARGO_PROFILE_RELEASE_LTO: true
+          CARGO_PROFILE_RELEASE_CODEGEN_UNITS: 1
+
+      - name: upload artifact
+        uses: actions/upload-artifact@v4
         with:
-          tagName: v__VERSION__
-          releaseName: 'Wallery 幕间 v__VERSION__'
-          releaseBody: '请从下方 Assets 下载对应平台的安装包。'
-          releaseDraft: true
-          args: ${{ matrix.args }}
+          name: Wallery-${{ matrix.name }}
+          path: |
+            src-tauri/target/release/wallery.exe
+            src-tauri/target/release/bundle/
+          if-no-files-found: warn
