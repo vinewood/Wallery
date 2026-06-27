@@ -104,7 +104,7 @@ impl Default for WalleryConfig {
             last_update: String::new(),
             download_path: String::new(),
             open_folder_after_download: true,
-            last_selected_source: String::new(),
+            last_selected_source: "unsplash".to_string(),
         }
     }
 }

@@ -66,6 +66,7 @@ pub fn run() {
 
     tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())
+        .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_autostart::init(
             tauri_plugin_autostart::MacosLauncher::LaunchAgent,
             Some(vec!["--minimized"]),
@@ -108,6 +109,9 @@ pub fn run() {
             commands::favorites_cmds::remove_favorite,
             commands::favorites_cmds::get_favorites,
             commands::favorites_cmds::is_favorited,
+            commands::update_cmds::check_update,
+            commands::update_cmds::download_update,
+            commands::update_cmds::apply_update,
         ])
         .setup(|app| {
             let app_handle = app.handle().clone();

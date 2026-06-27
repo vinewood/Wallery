@@ -3,11 +3,16 @@
   import { t } from '../lib/i18n';
   import { schedule, updateSchedule, nextWallpaper, setAutoStart, getAutoStart } from '../lib/stores/settings';
   import { invoke } from '@tauri-apps/api/core';
+  import { open } from '@tauri-apps/plugin-dialog';
 
   let sch = $state({ ...$schedule });
   let autoStart = $state(false);
   let dwPath = $state('');
   let openFolder = $state(true);
+  // Update state
+  let updateInfo = $state<{ has_update: boolean; latest_version: string; download_url: string; release_notes: string } | null>(null);
+  let checkingUpdate = $state(false);
+  let downloadingUpdate = $state(false);
 
   onMount(async () => {
     autoStart = await getAutoStart();
@@ -16,7 +21,38 @@
       dwPath = ds.download_path;
       openFolder = ds.open_folder_after_download;
     } catch {}
+    // Auto-check for update
+    checkForUpdate();
   });
+
+  async function pickDownloadPath() {
+    try {
+      const selected = await open({ directory: true, multiple: false, title: '选择壁纸保存目录' });
+      if (selected && typeof selected === 'string') {
+        dwPath = selected;
+        await invoke('set_download_path', { path: selected });
+      }
+    } catch (e) { console.warn('Folder picker:', e); }
+  }
+
+  async function checkForUpdate() {
+    checkingUpdate = true;
+    try {
+      const info: any = await invoke('check_update');
+      updateInfo = info;
+    } catch {}
+    checkingUpdate = false;
+  }
+
+  async function doUpdate() {
+    if (!updateInfo?.has_update || !updateInfo?.download_url) return;
+    downloadingUpdate = true;
+    try {
+      const scriptPath: string = await invoke('download_update', { url: updateInfo.download_url });
+      await invoke('apply_update', { scriptPath });
+    } catch (e) { console.error('Update failed:', e); }
+    downloadingUpdate = false;
+  }
 
   $effect(() => {
     if ($schedule) {
@@ -174,6 +210,7 @@
         <div class="option-label">📂 保存路径</div>
         <div class="option-desc" style="font-size:11px;word-break:break-all;">{dwPath || 'Pictures/Wallery（默认）'}</div>
       </div>
+      <button class="btn-change" onclick={pickDownloadPath}>更改</button>
     </div>
     <div class="option-row">
       <div>
@@ -190,6 +227,30 @@
         aria-label="Toggle open folder after download"
       ></button>
     </div>
+  </div>
+</div>
+
+<!-- Update Section -->
+<div class="glass-card" style="margin-top:20px;">
+  <div class="section-header">
+    <span class="section-title">🔄 软件更新</span>
+  </div>
+  <div class="schedule-options">
+    {#if checkingUpdate}
+      <div style="font-size:12px;color:var(--text-muted);">正在检查更新…</div>
+    {:else if updateInfo?.has_update}
+      <div class="option-row">
+        <div>
+          <div class="option-label">发现新版本 v{updateInfo.latest_version}</div>
+          <div class="option-desc" style="font-size:11px;max-height:60px;overflow:hidden;">{updateInfo.release_notes}</div>
+        </div>
+        <button class="btn-change" disabled={downloadingUpdate} onclick={doUpdate}>
+          {downloadingUpdate ? '下载中…' : '立即更新'}
+        </button>
+      </div>
+    {:else}
+      <div style="font-size:12px;color:var(--text-muted);">已是最新版本 v1.0.0</div>
+    {/if}
   </div>
 </div>
 
@@ -279,6 +340,21 @@
     gap: 12px;
   }
   .option-row:last-child { border-bottom: none; }
+  .btn-change {
+    padding: 5px 14px;
+    border-radius: 100px;
+    border: 1px solid var(--glass-border);
+    background: var(--glass-bg);
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-family: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+  .btn-change:hover { background: var(--accent); color: white; border-color: var(--accent); }
+  .btn-change:disabled { opacity: 0.5; cursor: not-allowed; }
   .option-label {
     font-size: 13.5px;
     color: var(--text-primary, #e8eaed);
