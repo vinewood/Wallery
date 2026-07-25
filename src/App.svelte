@@ -112,7 +112,9 @@
     settingIdx = idx;
     try {
       if (item.url) {
-        const ok = await setWallpaperFrom(item.url, item.source);
+        const w = window.screen.width;
+        const h = window.screen.height;
+        const ok = await setWallpaperFrom(item.url, item.source, w, h);
         if (ok) showToast(`已设为壁纸 (${item.source})`, 'ok');
         else showToast('设为壁纸失败', 'err');
       } else {
@@ -327,7 +329,7 @@
                 <div class="wp-overlay">
                   <span class="wp-source-tag">{fav.source}</span>
                   <div class="wp-actions">
-                    <button class="wp-btn" title="设为壁纸" onclick={() => setWallpaperFrom(fav.url, fav.source)}>
+                    <button class="wp-btn" title="设为壁纸" onclick={() => { const w = window.screen.width; const h = window.screen.height; setWallpaperFrom(fav.url, fav.source, w, h); }}>
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
                     </button>
                     <button class="wp-btn faved" title="取消收藏" onclick={async () => { await removeFavorite(fav.id); showToast('已取消收藏', 'ok'); }}>

@@ -189,9 +189,9 @@ export async function browseSource(source: string, category: string, page: numbe
   }
 }
 
-export async function setWallpaperFrom(url: string, source: string): Promise<boolean> {
+export async function setWallpaperFrom(url: string, source: string, screenWidth?: number, screenHeight?: number): Promise<boolean> {
   try {
-    await invoke('set_wallpaper_from', { url, source });
+    await invoke('set_wallpaper_from', { url, source, screenWidth, screenHeight });
     return true;
   } catch (e) {
     console.error('Failed to set wallpaper:', e);

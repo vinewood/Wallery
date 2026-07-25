@@ -94,22 +94,26 @@ pub async fn set_wallpaper_from(
     app: tauri::AppHandle,
     url: String,
     source: String,
+    screen_width: Option<u32>,
+    screen_height: Option<u32>,
 ) -> Result<String, String> {
+    use crate::resolution;
     use crate::wallpaper_manager::WallpaperManager;
 
-    let path = WallpaperManager::download(&url, &source).await?;
+    let best_url = resolution::resolve_best_url(&url, &source, screen_width.unwrap_or(1920), screen_height.unwrap_or(1080));
+    let path = WallpaperManager::download(&best_url, &source).await?;
     WallpaperManager::set_desktop(&path)?;
 
     // Update config
     let mut cfg = config::WalleryConfig::load().unwrap_or_default();
-    cfg.current_wallpaper_url = url.clone();
+    cfg.current_wallpaper_url = best_url.clone();
     cfg.current_wallpaper_path = path.to_string_lossy().to_string();
     cfg.current_source = source.clone();
     cfg.save().ok();
 
     // Emit event
     let _ = app.emit("wallpaper-changed", serde_json::json!({
-        "url": url,
+        "url": best_url,
         "source": source,
         "path": path.to_string_lossy().to_string(),
     }));

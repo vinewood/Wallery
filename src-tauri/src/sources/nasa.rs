@@ -71,10 +71,8 @@ impl WallpaperSource for NasaSource {
     }
 
     fn hot_categories(&self) -> Vec<&'static str> {
-        vec![
-            "Nebula", "Galaxy", "Planet", "Moon", "Sun",
-            "ISS", "Aurora", "Comet", "Deep Space",
-        ]
+        vec!["Nebula", "Galaxy", "Planet", "Earth", "Moon", "Sun", "ISS", "Aurora",
+             "Comet", "Deep Space", "Mars", "Jupiter", "Saturn", "Solar Flare", "Milky Way", "Constellation"]
     }
 
     async fn fetch_list(

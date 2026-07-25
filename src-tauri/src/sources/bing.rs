@@ -63,7 +63,7 @@ impl WallpaperSource for BingSource {
     }
 
     fn hot_categories(&self) -> Vec<&'static str> {
-        vec![] // Bing doesn't have categories, it's the daily image
+        vec!["Nature", "Landscape", "City", "Animal", "Travel", "Aerial", "Underwater", "Night", "Sunrise", "Snow"]
     }
 
     async fn fetch_list(

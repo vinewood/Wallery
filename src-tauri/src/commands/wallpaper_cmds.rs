@@ -1,4 +1,5 @@
 use crate::config;
+use crate::resolution;
 use crate::sources;
 use crate::wallpaper_manager::WallpaperManager;
 use chrono::Local;
@@ -143,7 +144,8 @@ pub async fn download_wallpaper_url(
         std::path::PathBuf::from(&cfg.download_path)
     };
 
-    let local_path = WallpaperManager::download(&url, &source).await?;
+    let best_url = resolution::resolve_best_url(&url, &source, screen_width.unwrap_or(1920), screen_height.unwrap_or(1080));
+    let local_path = WallpaperManager::download(&best_url, &source).await?;
     std::fs::create_dir_all(&dest).map_err(|e| e.to_string())?;
 
     let now = Local::now();

@@ -76,11 +76,9 @@ impl WallpaperSource for UnsplashSource {
     }
 
     fn hot_categories(&self) -> Vec<&'static str> {
-        vec![
-            "Travel", "Textures", "Experimental", "Film",
-            "3D Renders", "Interior", "Street Photography",
-            "Minimalism", "Food", "Arts & Culture",
-        ]
+        vec!["Travel", "Nature", "Textures", "Film", "Interior", "Street Photography",
+             "Minimalism", "Food", "Architecture", "Business", "Technology", "Fashion",
+             "Animals", "Health", "Sports", "Night", "Water", "Mountains"]
     }
 
     async fn fetch_list(

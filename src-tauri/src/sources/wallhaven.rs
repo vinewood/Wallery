@@ -69,11 +69,9 @@ impl WallpaperSource for WallhavenSource {
     }
 
     fn hot_categories(&self) -> Vec<&'static str> {
-        vec![
-            "Nature", "Minimal", "Abstract", "Anime", "City",
-            "Space", "Ocean", "Mountain", "Forest", "Architecture",
-            "Cyberpunk", "Dark", "Fantasy", "Retro", "Sci-Fi",
-        ]
+        vec!["Nature", "Minimal", "Abstract", "Anime", "City", "Space", "Ocean",
+             "Mountain", "Forest", "Architecture", "Cyberpunk", "Dark", "Fantasy",
+             "Retro", "Sci-Fi", "Night", "Sunset", "Waterfall", "Vintage", "Technology"]
     }
 
     async fn fetch_list(

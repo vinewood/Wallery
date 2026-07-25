@@ -2,6 +2,7 @@ pub mod cache;
 pub mod commands;
 pub mod config;
 pub mod favorites;
+pub mod resolution;
 pub mod scheduler;
 pub mod sources;
 pub mod wallpaper_manager;

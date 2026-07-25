@@ -69,11 +69,9 @@ impl WallpaperSource for PexelsSource {
     }
 
     fn hot_categories(&self) -> Vec<&'static str> {
-        vec![
-            "Landscape", "Sunset", "Flowers", "Beach",
-            "Autumn", "Winter", "Wildlife", "Roads",
-            "Mountains", "Waterfall", "Stars", "Forest",
-        ]
+        vec!["Landscape", "Nature", "Sunset", "Flowers", "Beach", "Autumn", "Winter", "Wildlife",
+             "Mountains", "Waterfall", "Stars", "Forest", "Ocean", "City", "Architecture",
+             "Travel", "Night", "Minimal", "Abstract", "Food"]
     }
 
     async fn fetch_list(
