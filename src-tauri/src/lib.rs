@@ -129,6 +129,8 @@ pub fn run() {
                 MenuItem::with_id(app, "save", "保存当前壁纸", true, None::<&str>)?;
             let open_src =
                 MenuItem::with_id(app, "open_src", "打开来源页面", true, None::<&str>)?;
+            let open_wnd =
+                MenuItem::with_id(app, "open_wnd", "打开程序界面", true, None::<&str>)?;
             let sep2 = tauri::menu::PredefinedMenuItem::separator(app)?;
             let settings =
                 MenuItem::with_id(app, "settings", "设置…", true, None::<&str>)?;
@@ -145,6 +147,7 @@ pub fn run() {
                     &save_img,
                     &open_src,
                     &sep2,
+                    &open_wnd,
                     &settings,
                     &sep3,
                     &quit,
@@ -186,7 +189,7 @@ pub fn run() {
                         "open_src" => {
                             log::info!("Open source page triggered");
                         }
-                        "settings" => {
+                        "open_wnd" | "settings" => {
                             if let Some(window) = app.get_webview_window("main") {
                                 let _ = window.show();
                                 let _ = window.set_focus();

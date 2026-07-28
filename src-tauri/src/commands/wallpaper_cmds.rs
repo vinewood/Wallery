@@ -3,6 +3,9 @@ use crate::resolution;
 use crate::sources;
 use crate::wallpaper_manager::WallpaperManager;
 use chrono::Local;
+use rand::seq::SliceRandom;
+use rand::SeedableRng;
+use rand::rngs::StdRng;
 use tauri::Emitter;
 use tauri::AppHandle;
 
@@ -10,16 +13,23 @@ use tauri::AppHandle;
 /// This is the core function called by both the scheduler and the "Next" tray command.
 pub async fn do_next_wallpaper(app: &AppHandle) -> Result<(), String> {
     let cfg = config::WalleryConfig::load().unwrap_or_default();
-    let enabled = cfg.get_enabled_sources();
+    let mut enabled = cfg.get_enabled_sources();
 
     if enabled.is_empty() {
         return Err("No sources enabled. Please enable at least one source.".to_string());
     }
 
+    // Shuffle sources for true randomness
+    let mut rng = StdRng::from_entropy();
+    enabled.shuffle(&mut rng);
+
     let all_sources = sources::all_sources();
     let categories = cfg.categories.clone();
 
-    // Try each enabled source in order until one succeeds
+    // Detect screen resolution (fallback 1920x1080)
+    let (screen_w, screen_h) = get_screen_size();
+
+    // Try each enabled source in random order until one succeeds
     for (source_name, source_cfg) in &enabled {
         if let Some(source) = all_sources.iter().find(|s| s.name() == source_name) {
             match source
@@ -27,9 +37,12 @@ pub async fn do_next_wallpaper(app: &AppHandle) -> Result<(), String> {
                 .await
             {
                 Ok((image_url, source_page, attribution)) => {
+                    // Resolve URL to best match screen resolution
+                    let best_url = resolution::resolve_best_url(&image_url, source_name, screen_w, screen_h);
+
                     // Download the image
                     let local_path =
-                        WallpaperManager::download(&image_url, source_name).await?;
+                        WallpaperManager::download(&best_url, source_name).await?;
 
                     // Set desktop wallpaper
                     if cfg.schedule.set_desktop {
@@ -50,9 +63,11 @@ pub async fn do_next_wallpaper(app: &AppHandle) -> Result<(), String> {
                     new_cfg.save()?;
 
                     log::info!(
-                        "Wallpaper updated: {} from {}",
+                        "Wallpaper updated: {} from {} (resolved to {}x{})",
                         image_url,
-                        source_name
+                        source_name,
+                        screen_w,
+                        screen_h,
                     );
 
                     // Emit event to frontend
@@ -74,6 +89,41 @@ pub async fn do_next_wallpaper(app: &AppHandle) -> Result<(), String> {
     }
 
     Err("All sources failed to fetch a wallpaper".to_string())
+}
+
+/// Get screen resolution. On Windows queries via PowerShell, fallback 1920x1080.
+fn get_screen_size() -> (u32, u32) {
+    #[cfg(target_os = "windows")]
+    {
+        // Run PowerShell to get screen dimensions
+        let script = r#"
+Add-Type @"
+using System;
+using System.Runtime.InteropServices;
+public class Screen {
+    [DllImport("user32.dll")]
+    public static extern int GetSystemMetrics(int nIndex);
+    public static int Width() { return GetSystemMetrics(0); }
+    public static int Height() { return GetSystemMetrics(1); }
+}
+"@
+[Screen]::Width()
+[Screen]::Height()
+"#;
+        if let Ok(out) = std::process::Command::new("powershell")
+            .args(["-NoProfile", "-Command", script])
+            .output()
+        {
+            let s = String::from_utf8_lossy(&out.stdout);
+            let lines: Vec<&str> = s.lines().filter(|l| !l.is_empty()).collect();
+            if lines.len() >= 2 {
+                if let (Ok(w), Ok(h)) = (lines[0].trim().parse(), lines[1].trim().parse()) {
+                    return (w, h);
+                }
+            }
+        }
+    }
+    (1920, 1080)
 }
 
 #[tauri::command]
